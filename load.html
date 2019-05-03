@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html>
+<body bgcolor="#202020">
+<head>
+    <title>Conway's Game of Life</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+
+.button {
+    background-color: #444;
+    cursor: pointer;
+    color: #FFF;
+    width: 200px;
+    height: 40px;
+    padding: 0;
+    border: none;
+    background: none;
+    font-size: 15px;
+}
+
+.button:hover {
+    background-color: #222;
+}
+
+.collapsible {
+  background-color: #777;
+  color: white;
+  cursor: pointer;
+  padding: 15px;
+  width: 100%;
+  border: 3px solid #FFF;
+  text-align: center;
+  outline: none;
+  font-size: 20px;
+  margin-bottom: 1px;
+}
+
+.active, .collapsible:hover {
+  background-color: #555;
+}
+
+.content {
+  padding: 0px;
+  display: none;
+  overflow: hidden;
+  background-color: #444;
+}
+
+.grid-container {
+    display: grid;
+}
+.gridItemText {
+    border: 2px solid #FFF;
+    color: #FFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.gridItemOther {
+    border: 2px solid #FFF;
+    color: #FFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.largeButton {
+    background-color: #444;
+    cursor: pointer;
+    color: #FFF;
+    width: 395px;
+    height: 40px;
+    padding: 0;
+    border: none;
+    background: none;
+    font-size: 15px;
+}
+
+.largeButton:hover {
+    background-color: #222;
+}
+
+.slider {
+    cursor: pointer;
+}
+
+.tBoxLarge {
+    width: 155px;
+}
+
+.tBoxSlider {
+    width: 155px;
+}
+
+.tBoxSmall {
+    width: 95px;
+}
+
+
+
+</style>
+
+</head>
+<!--@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-->
+<!--                    MAIN BODY OF THE HTML                           -->
+<!--@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-->
+<body id='main-body' >
+    <div class="grid-container" id="containerO">
+
+
+        <div class="item" id="o1">
+            <canvas id="canvas_1"
+                    width="1960"
+                    height="1280"
+                    >
+                <!-- This message is displayed if canvas is not available -->
+                Your browser does not support the HTML5 canvas tag.
+            </canvas>
+
+            <style>
+                #o1 {
+                    grid-row: 1 / 2;
+                    grid-column: 1 / 2;
+                }
+            </style>
+        </div>
+
+
+
+        <div class="item" id="o2">
+            <button class="collapsible">Sim Info</button>
+            <div class="content">
+
+                <div class="grid-container" id="containerA">
+
+                    <div class="gridItemText" id="a11">
+                        FPS:
+                        <style>
+                            #a11 {
+                                grid-row: 1 / 2;
+                                grid-column: 1 / 2;
+                            }
+                        </style>
+                    </div>
+
+                    <div class="gridItemOther" id="a12">
+                        <input  type='number' id='FPS_Output' class="tBoxLarge" step=1 value=0 readonly>
+                        <style>
+                            #a12 {
+                                grid-row: 1 / 2;
+                                grid-column: 2 / 3;
+                            }
+                        </style>
+                    </div>
+
+                    <div class="gridItemText" id="a21">
+                        Tick Rate (Updates/second):
+                        <style>
+                            #a21 {
+                                grid-row: 2 / 3;
+                                grid-column: 1 / 2;
+                            }
+                        </style>
+                    </div>
+
+
+                    <div class="gridItemOther" id="a22">
+                        <input  type='number' id='Updates_Output' class="tBoxLarge" step=1 value=10>
+                        <style>
+                            #a22 {
+                                grid-row: 2 / 3;
+                                grid-column: 2 / 3;
+                            }
+                        </style>
+                    </div>
+
+                    <div class="gridItemText" id="a31">
+                        Iteration #:
+                        <style>
+                            #a31 {
+                                grid-row: 3 / 4;
+                                grid-column: 1 / 2;
+                            }
+                        </style>
+                    </div>
+
+                    <div class="gridItemOther" id="a32">
+                        <input  type='number' id='Iterations_Output' class="tBoxLarge" step=1 value=0 readonly>
+                        <style>
+                            #a32 {
+                                grid-row: 3 / 4;
+                                grid-column: 2 / 3;
+                            }
+                        </style>
+                    </div>
+
+
+                <div class="gridItemOther" id="a41">
+                    <input type="submit" class="largeButton" id="PauseButton" value="Run"></button>
+                    <style>
+                        #a41 {
+                            grid-row: 4 / 5;
+                            grid-column: 1 / span 2;
+                        }
+                    </style>
+                </div>
+
+                    <style>
+                        #containerA {
+                            background-color: #404040;
+                            grid-template-columns: 180px, 180px;
+                            grid-column-gap: 0px;
+                            grid-template-rows: 40px 40px 40px 40px;
+                            grid-row-gap: 0px;
+                        }
+                    </style>
+                </div>
+
+        </div>
+
+        <button class="collapsible">Colors</button>
+        <div class="content">
+
+            <div class="grid-container" id="containerB">
+
+                <div class="gridItemText" id="b11">
+                    Red:
+                    <style>
+                        #b11 {
+                            grid-row: 1 / 2;
+                            grid-column: 1 / 2;
+                        }
+                    </style>
+                </div>
+
+                <div class="gridItemOther" id="b12">
+                    <div class="slidecontainer">
+                        <input type="range" min="0" max="255" value="0" class="slider" id="redSlider">
+                    </div>
+                    <style>
+                        #b12 {
+                            grid-row: 1 / 2;
+                            grid-column: 2 / 3;
+                        }
+                    </style>
+                </div>
+
+
+                <div class="gridItemOther" id="b13">
+                    <input  type='number' id='redSliderT' class="tBoxSlider" step=1 value=0>
+                    <style>
+                        #b13 {
+                            grid-row: 1 / 2;
+                            grid-column: 3 / 4;
+                        }
+                    </style>
+                </div>
+
+                <div class="gridItemText" id="b21">
+                    Green:
+                    <style>
+                        #b21 {
+                            grid-row: 2 / 3;
+                            grid-column: 1 / 2;
+                        }
+                    </style>
+                </div>
+
+                <div class="gridItemOther" id="b22">
+                    <div class="slidecontainer">
+                        <input type="range" min="0" max="255" value="255" class="slider" id="greenSlider">
+                    </div>
+                    <style>
+                        #b22 {
+                            grid-row: 2 / 3;
+                            grid-column: 2 / 3;
+                        }
+                    </style>
+                </div>
+
+
+                <div class="gridItemOther" id="b23">
+                    <input  type='number' class="tBoxSlider" id='greenSliderT' step=1 value=255>
+                    <style>
+                        #b23 {
+                            grid-row: 2 / 3;
+                            grid-column: 3 / 4;
+                        }
+                    </style>
+                </div>
+
+                <div class="gridItemText" id="b31">
+                    Blue:
+                    <style>
+                        #b31 {
+                            grid-row: 3 / 4;
+                            grid-column: 1 / 2;
+                        }
+                    </style>
+                </div>
+
+                <div class="gridItemOther" id="b32">
+                    <div class="slidecontainer">
+                        <input type="range" min="0" max="255" value="0" class="slider" id="blueSlider">
+                    </div>
+                    <style>
+                        #b32 {
+                            grid-row: 3 / 4;
+                            grid-column: 2 / 3;
+                        }
+                    </style>
+                </div>
+
+                <div class="gridItemOther" id="b33">
+                    <input  type='number' id='blueSliderT' class="tBoxSlider" step=1 value=0>
+                    <style>
+                        #b33 {
+                            grid-row: 3 / 4;
+                            grid-column: 3 / 4;
+                        }
+                    </style>
+                </div>
+
+                <style>
+                    #containerB {
+                        background-color: #404040;
+                        grid-template-columns: 75px 150px 175px;
+                        grid-column-gap: 0px;
+                        grid-template-rows: 40px 40px 40px;
+                        grid-row-gap: 0px;
+                    }
+                </style>
+            </div>
+        </div>
+
+
+        <button class="collapsible">Advanced</button>
+        <div class="content">
+            <div class="grid-container" id="containerC">
+                <div class="gridItemText" id="c11">
+                    Boundary Conditions:
+                    <style>
+                        #c11 {
+                            grid-row: 1 / 2;
+                            grid-column: 1 / 2;
+                        }
+                    </style>
+                </div>
+
+                <div class="gridItemOther" id="c12">
+                    <input  type='radio' name=Boundary_Mode value="p" checked="checked"> Periodic
+                    <style>
+                        #c12 {
+                            grid-row: 1 / 2;
+                            grid-column: 2 / 3;
+                        }
+                    </style>
+                </div>
+
+
+                <div class="gridItemOther" id="c13">
+                    <input  type='radio' name=Boundary_Mode value="d"> Dirichlet
+                    <style>
+                        #c13 {
+                            grid-row: 1 / 2;
+                            grid-column: 3 / 4;
+                        }
+                    </style>
+                </div>
+
+
+                <div class="gridItemText" id="c21">
+                    Selection Rule (B/S):
+                    <style>
+                        #c21 {
+                            grid-row: 2 / 3;
+                            grid-column: 1 / 2;
+                        }
+                    </style>
+                </div>
+
+                <div class="gridItemOther" id="c22">
+                    <input  type='text' id='birthInput' class="tBoxSmall" value="3">
+                    <style>
+                        #c22 {
+                            grid-row: 2 / 3;
+                            grid-column: 2 / 3;
+                        }
+                    </style>
+                </div>
+
+
+                <div class="gridItemOther" id="c23">
+                    <input  type='text' id='surviveInput' class="tBoxSmall" value="2, 3">
+                    <style>
+                        #c23 {
+                            grid-row: 2 / 3;
+                            grid-column: 3 / 4;
+                        }
+                    </style>
+                </div>
+
+                <div class="gridItemOther" id="c31">
+                    <button class="button" id="randomizeButton"> Randomize </button>
+                    <style>
+                        #c31 {
+                            grid-row: 3 / 4;
+                            grid-column: 1 / 2;
+                        }
+                    </style>
+                </div>
+
+                <div class="gridItemOther" id="c32">
+                    <input type="file" style="display: none" id="importInput" accept=".png">
+                    <button class="button" id="importButton" onclick="document.getElementById('importInput').click();"> Import </button>
+                    <style>
+                        #c32 {
+                            grid-row: 3 / 4;
+                            grid-column: 2 / 3;
+                        }
+                    </style>
+                </div>
+
+
+                <div class="gridItemOther" id="c33">
+                    <a id="link" style="display: none"></a>
+                    <button class="button" id="saveButton"> Save </button>
+                    <style>
+                        #c33 {
+                            grid-row: 3 / 4;
+                            grid-column: 3 / 4;
+                        }
+                    </style>
+                </div>
+
+                <div class="gridItemText" id="c41">
+                    Save File Name:
+                    <style>
+                        #c41 {
+                            grid-row: 4 / 5;
+                            grid-column: 1 / 2;
+                        }
+                    </style>
+                </div>
+
+                <div class="gridItemOther" id="c42">
+                    <input  type='text' id='nameInput' class="tBoxLarge" value="Example">
+                    <style>
+                        #c42 {
+                            grid-row: 4 / 5;
+                            grid-column: 2 / span 2;
+                        }
+                    </style>
+                </div>
+
+                <style>
+                    #containerC {
+                        background-color: #404040;
+                        grid-template-columns: 170px 115px 115px;
+                        grid-column-gap: 0px;
+                        grid-template-rows: 40px 40px 40px 40px;
+                        grid-row-gap: 0px;
+                    }
+                </style>
+            </div>
+        </div>
+        <button class="collapsible">Controls</button>
+        <div class="content">
+            <div class="grid-container" id="containerD">
+                <div class="gridItemText" id="d11">
+                    Move Up:
+                    <style>
+                        #d11 {
+                            grid-row: 1 / 2;
+                            grid-column: 1 / 2;
+                        }
+                    </style>
+                </div>
+
+                <div class="gridItemText" id="d12">
+                    w
+                    <style>
+                        #d12 {
+                            grid-row: 1 / 2;
+                            grid-column: 2 / 3;
+                        }
+                    </style>
+                </div>
+
+                <div class="gridItemText" id="d21">
+                    Move Down:
+                    <style>
+                        #d21 {
+                            grid-row: 2 / 3;
+                            grid-column: 1 / 2;
+                        }
+                    </style>
+                </div>
+
+                <div class="gridItemText" id="d22">
+                    s
+                    <style>
+                        #d22 {
+                            grid-row: 2 / 3;
+                            grid-column: 2 / 3;
+                        }
+                    </style>
+                </div>
+
+                <div class="gridItemText" id="d31">
+                    Move Left:
+                    <style>
+                        #d31 {
+                            grid-row: 3 / 4;
+                            grid-column: 1 / 2;
+                        }
+                    </style>
+                </div>
+
+                <div class="gridItemText" id="d32">
+                    a
+                    <style>
+                        #d32 {
+                            grid-row: 3 / 4;
+                            grid-column: 2 / 3;
+                        }
+                    </style>
+                </div>
+
+                <div class="gridItemText" id="d41">
+                    Move Right:
+                    <style>
+                        #d41 {
+                            grid-row: 4 / 5;
+                            grid-column: 1 / 2;
+                        }
+                    </style>
+                </div>
+
+                <div class="gridItemText" id="d42">
+                    f
+                    <style>
+                        #d42 {
+                            grid-row: 4 / 5;
+                            grid-column: 2 / 3;
+                        }
+                    </style>
+                </div>
+
+                <div class="gridItemText" id="d51">
+                    Zoom In/Out:
+                    <style>
+                        #d51 {
+                            grid-row: 5 / 6;
+                            grid-column: 1 / 2;
+                        }
+                    </style>
+                </div>
+
+                <div class="gridItemText" id="d52">
+                    Mouse Wheel
+                    <style>
+                        #d52 {
+                            grid-row: 5 / 6;
+                            grid-column: 2 / 3;
+                        }
+                    </style>
+                </div>
+
+
+                <div class="gridItemText" id="d61">
+                    Pause:
+                    <style>
+                        #d61 {
+                            grid-row: 6 / 7;
+                            grid-column: 1 / 2;
+                        }
+                    </style>
+                </div>
+
+                <div class="gridItemText" id="d62">
+                    p
+                    <style>
+                        #d62 {
+                            grid-row: 6 / 7;
+                            grid-column: 2 / 3;
+                        }
+                    </style>
+                </div>
+
+
+                <div class="gridItemText" id="d71">
+                    Speed Up Sim:
+                    <style>
+                        #d71 {
+                            grid-row: 7 / 8;
+                            grid-column: 1 / 2;
+                        }
+                    </style>
+                </div>
+
+                <div class="gridItemText" id="d72">
+                    .
+                    <style>
+                        #d72 {
+                            grid-row: 7 / 8;
+                            grid-column: 2 / 3;
+                        }
+                    </style>
+                </div>
+
+
+                <div class="gridItemText" id="d81">
+                    Slow Down Sim:
+                    <style>
+                        #d81 {
+                            grid-row: 8 / 9;
+                            grid-column: 1 / 2;
+                        }
+                    </style>
+                </div>
+
+                <div class="gridItemText" id="d82">
+                    ,
+                    <style>
+                        #d82 {
+                            grid-row: 8 / 9;
+                            grid-column: 2 / 3;
+                        }
+                    </style>
+                </div>
+
+
+                <div class="gridItemText" id="d91">
+                    Clear Screen:
+                    <style>
+                        #d91 {
+                            grid-row: 9 / 10;
+                            grid-column: 1 / 2;
+                        }
+                    </style>
+                </div>
+
+                <div class="gridItemText" id="d92">
+                    Delete
+                    <style>
+                        #d92 {
+                            grid-row: 9 / 10;
+                            grid-column: 2 / 3;
+                        }
+                    </style>
+                </div>
+
+                <div class="gridItemText" id="d101">
+                    Paint Grid:
+                    <style>
+                        #d101 {
+                            grid-row: 10 / 11;
+                            grid-column: 1 / 2;
+                        }
+                    </style>
+                </div>
+
+                <div class="gridItemText" id="d102">
+                    Left Click
+                    <style>
+                        #d102 {
+                            grid-row: 10 / 11;
+                            grid-column: 2 / 3;
+                        }
+                    </style>
+                </div>
+
+                <div class="gridItemText" id="d111">
+                    Erase Grid:
+                    <style>
+                        #d111 {
+                            grid-row: 11 / 12;
+                            grid-column: 1 / 2;
+                        }
+                    </style>
+                </div>
+
+                <div class="gridItemText" id="d112">
+                    Shift + Left Click
+                    <style>
+                        #d112 {
+                            grid-row: 11 / 12;
+                            grid-column: 2 / 3;
+                        }
+                    </style>
+                </div>
+
+                <div class="gridItemText" id="d121">
+                    Reset:
+                    <style>
+                        #d121 {
+                            grid-row: 12 / 13;
+                            grid-column: 1 / 2;
+                        }
+                    </style>
+                </div>
+
+                <div class="gridItemText" id="d122">
+                    r
+                    <style>
+                        #d122 {
+                            grid-row: 12 / 13;
+                            grid-column: 2 / 3;
+                        }
+                    </style>
+                </div>
+
+
+                <style>
+                    #containerD {
+                        background-color: #404040;
+                        grid-template-columns: 200px 200px;
+                        grid-column-gap: 0px;
+                        grid-template-rows: 40px 40px 40px 40px 40px 40px 40px 40px 40px 40px 40px 40px;
+                        grid-row-gap: 0px;
+                    }
+                </style>
+            </div>
+
+        </div>
+        <style>
+            #o2 {
+                grid-row: 1 / 2;
+                grid-column: 2 / 3;
+            }
+        </style>
+
+    <style>
+        #containerO {
+            grid-template-columns: 1960px 400px;
+            grid-column-gap: 50px;
+            grid-template-rows: 1280px;
+            grid-row-gap: 5px;
+        }
+    </style>
+</body>
+
+<script>
+    var coll = document.getElementsByClassName("collapsible");
+    var i;
+
+    for (i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function() {
+        this.classList.toggle("active");
+        var content = this.nextElementSibling;
+
+        if (content.style.display === "block") {
+          content.style.display = "none";
+            this.style.marginBottom = "1px";
+        } else {
+          content.style.display = "block";
+            this.style.marginBottom = "0px";
+        }
+      });
+    }
+</script>
+
+
+<script>
+    //Hook up the sliders in advance so that the source script
+    //can just look at the text box values
+    var sliders = document.getElementsByClassName("slider");
+    var i;
+    for (i = 0; i < sliders.length; i++) {
+      sliders[i].addEventListener("input", function() {
+        //Unfortunately the nature of grids makes it difficult to get the
+        //associated text box for output, so we shortcut by making the id
+        //of the slider "example" and the text box "exampleT" for easy access
+        var sibling = document.getElementById(this.id + "T");
+        sibling.value = this.value;
+        sibling.dispatchEvent(new Event("change"));
+        });
+    }
+
+    var tBoxes = document.getElementsByClassName("tBoxSlider");
+    var k;
+    for (k = 0; k < tBoxes.length; k++) {
+        tBoxes[k].addEventListener("change", function() {
+        var sibling = document.getElementById(this.id.slice(0,-1));
+        sibling.value = this.value;
+        });
+    }
+</script>
+
+<script src='Setup.js'></script>
+</html>
