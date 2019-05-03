@@ -952,7 +952,7 @@ function init() {
               //Copy the texture contents to a holder fbo
               switchShaderProgram(programInfoRefresh);
               gl.uniform4f(programInfoRefresh.uniformLocations.liveColor,
-                color[0], color[1], color[2], color[3]);
+                LIVE_COLOR[0], LIVE_COLOR[1], LIVE_COLOR[2], LIVE_COLOR[3]);
               gl.uniform1i(programInfoRefresh.uniformLocations.shouldFlip, sFlip);
               drawFrame(fboSave, (phase == -1) ? tex2 : tex1, true);
             }
