@@ -953,8 +953,8 @@ function init() {
               switchShaderProgram(programInfoRefresh);
               gl.uniform4f(programInfoRefresh.uniformLocations.liveColor,
                 LIVE_COLOR[0], LIVE_COLOR[1], LIVE_COLOR[2], LIVE_COLOR[3]);
-              gl.uniform1i(programInfoRefresh.uniformLocations.shouldFlip, sFlip);
-              drawFrame(fboSave, (phase == -1) ? tex2 : tex1, true);
+              gl.uniform1i(programInfoRefresh.uniformLocations.shouldFlip, false);
+              drawFrame(fboSave, (phase == -1) ? tex1 : tex2, true);
             }
             timeStep();
         }
