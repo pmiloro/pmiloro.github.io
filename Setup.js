@@ -144,7 +144,7 @@ function InitializeShader(gl, source_vs, source_frag, fv, ff) {
 //to the InitializeShader() method
 function LoadShader(gl, shaderName, filenameVertexShader, filenameFragmentShader, index)
 {
-    var ShaderDirectory = "shaders";
+    var ShaderDirectory = "Shaders";
 
     var filename_vs = ShaderDirectory + "/" + filenameVertexShader;
     var filename_fs = ShaderDirectory + "/" + filenameFragmentShader;
